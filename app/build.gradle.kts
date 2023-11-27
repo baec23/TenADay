@@ -24,17 +24,17 @@ plugins {
 }
 
 android {
-    namespace = "com.baec23.composetemplate"
+    namespace = "com.baec23.tenaday"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.baec23.composetemplate"
+        applicationId = "com.baec23.tenaday"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.baec23.composetemplate.HiltTestRunner"
+        testInstrumentationRunner = "com.baec23.tenaday.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -48,7 +48,10 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
         }
     }
 
@@ -129,12 +132,13 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
 
-    //Coil
+    // Coil
     implementation(libs.coil.compose)
 
-    //Ludwig
+    // Ludwig
     implementation(libs.ludwig)
 
-    //Retrofit
+    // Retrofit
     implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
 }
