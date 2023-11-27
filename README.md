@@ -1,5 +1,5 @@
 # ComposeTemplate
-Starter template for Compose with Hilt and Coil
+Starter template for Compose with Hilt, Coil, and Retrofit
 
 ## How to Use
 ### Clone

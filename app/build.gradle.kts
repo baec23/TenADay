@@ -134,4 +134,7 @@ dependencies {
 
     //Ludwig
     implementation(libs.ludwig)
+
+    //Retrofit
+    implementation(libs.retrofit)
 }
