@@ -10,6 +10,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,8 +23,8 @@ fun QuizQuestionCard(
     modifier: Modifier = Modifier,
     question: String,
     potentialAnswers: List<KoreanWord>,
-    incorrectAnswers: List<String>,
-    onAnswerPress: (String) -> Unit
+    incorrectAnswerIndexes: List<Int>,
+    onAnswerPress: (Int) -> Unit
 ) {
     ElevatedCard(elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp)) {
         Column(
@@ -32,13 +33,13 @@ fun QuizQuestionCard(
         ) {
             Text(text = question, style = MaterialTheme.typography.displaySmall)
             Spacer(modifier = Modifier.height(16.dp))
-            potentialAnswers.map { potentialAnswer ->
+            potentialAnswers.mapIndexed { index, potentialAnswer ->
                 QuizAnswerButton(
                     displayedWord = potentialAnswer.text,
                     definition = potentialAnswer.definitions.first(),
-                    isIncorrect = incorrectAnswers.contains(potentialAnswer.text)
+                    isIncorrect = incorrectAnswerIndexes.contains(index)
                 ) {
-                    onAnswerPress(potentialAnswer.text)
+                    onAnswerPress(index)
                 }
             }
         }

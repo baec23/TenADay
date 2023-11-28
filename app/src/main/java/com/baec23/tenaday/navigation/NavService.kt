@@ -72,10 +72,12 @@ class NavService(val navController: NavHostController) {
 @Composable
 fun Navigation(
     navService: NavService,
-    snackbarService: SnackbarService,
+    snackbarService: SnackbarService
 ) {
     val currNavGraph by navService.currNavGraph
-    val shouldShowBottomNavBar by remember { derivedStateOf { currNavGraph?.route == mainNavGraphRoute } }
+    val shouldShowBottomNavBar by remember {
+        derivedStateOf { currNavGraph?.route == mainNavGraphRoute }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -88,18 +90,18 @@ fun Navigation(
                     items = bottomNavigationItems,
                     currNavScreenRoute = navService.currNavScreenRoute.value,
                     backgroundColor = Color.Unspecified,
-                    onBottomNavigationItemPressed = { navService.navController.navigate(it.route) },
+                    onBottomNavigationItemPressed = { navService.navController.navigate(it.route) }
                 )
             }
-        },
+        }
     ) {
         Column(
             modifier = Modifier
-                .padding(it),
+                .padding(it)
         ) {
             NavHost(
                 navController = navService.navController,
-                graph = navService.rootNavGraph,
+                graph = navService.rootNavGraph
             )
         }
     }

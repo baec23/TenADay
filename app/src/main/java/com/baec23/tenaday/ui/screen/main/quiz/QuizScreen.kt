@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,7 +23,7 @@ const val quizScreenRoute = "quiz_screen_route"
 fun NavGraphBuilder.quizScreen() {
     composable(route = quizScreenRoute) {
         val viewModel = hiltViewModel<QuizViewModel>()
-        val uiState = viewModel.uiState
+        val uiState by viewModel.uiState.collectAsState()
         QuizScreen(uiState = uiState, onEvent = { event -> viewModel.onEvent(event) })
     }
 }
@@ -35,7 +37,11 @@ fun QuizScreen(
     uiState: QuizUiState,
     onEvent: (QuizUiEvent) -> Unit
 ) {
-    BaseScreen(isBusy = uiState.isBusy) {
+    BaseScreen(
+        isBusy = uiState.isBusy,
+        error = uiState.error,
+        onErrorRetry = { onEvent(QuizUiEvent.OnRetryPress) }
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -48,7 +54,7 @@ fun QuizScreen(
                 modifier = Modifier.fillMaxWidth(),
                 question = uiState.currQuestionText,
                 potentialAnswers = uiState.potentialAnswers,
-                incorrectAnswers = uiState.incorrectAnswers,
+                incorrectAnswerIndexes = uiState.incorrectAnswerIndexes,
                 onAnswerPress = {
                     onEvent(QuizUiEvent.OnAnswerPress(it))
                 }

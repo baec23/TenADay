@@ -1,6 +1,7 @@
 package com.baec23.tenaday.model
 
 data class QuizQuestion(
-    val baseWord: EnglishWord,
-    val incorrectAnswers: List<KoreanWord>
+    val questionString: String,
+    val potentialAnswers: List<KoreanWord>,
+    val correctAnswerIndex: Int
 )
