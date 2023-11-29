@@ -15,7 +15,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -54,6 +56,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideTenADayApi(): TenADayApi = Retrofit.Builder().baseUrl(TenADayApi.BASE_URL)
-        .addConverterFactory(MoshiConverterFactory.create()).build().create()
+    fun provideTenADayApi(): TenADayApi {
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(1000, TimeUnit.MILLISECONDS)
+            .readTimeout(1000, TimeUnit.MILLISECONDS)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(TenADayApi.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create()
+    }
 }

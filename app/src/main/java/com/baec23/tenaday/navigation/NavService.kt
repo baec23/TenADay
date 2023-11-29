@@ -22,6 +22,7 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.createGraph
+import androidx.navigation.navOptions
 import com.baec23.ludwig.component.navbar.BottomNavigationBar
 import com.baec23.tenaday.navigation.navgraph.authNavGraph
 import com.baec23.tenaday.navigation.navgraph.bottomNavigationItems
@@ -90,7 +91,23 @@ fun Navigation(
                     items = bottomNavigationItems,
                     currNavScreenRoute = navService.currNavScreenRoute.value,
                     backgroundColor = Color.Unspecified,
-                    onBottomNavigationItemPressed = { navService.navController.navigate(it.route) }
+                    onBottomNavigationItemPressed = {
+                        if (it.route != navService.currNavScreenRoute.value) {
+                            val popped = navService.navController.popBackStack(
+                                route = it.route,
+                                inclusive = false,
+                                saveState = true
+                            )
+                            if (!popped) {
+                                navService.navController.navigate(
+                                    it.route,
+                                    navOptions {
+                                        restoreState = true
+                                    }
+                                )
+                            }
+                        }
+                    }
                 )
             }
         }

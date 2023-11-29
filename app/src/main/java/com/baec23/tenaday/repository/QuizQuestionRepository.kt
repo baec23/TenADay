@@ -3,19 +3,18 @@ package com.baec23.tenaday.repository
 import com.baec23.tenaday.api.TenADayApi
 import com.baec23.tenaday.model.KoreanWord
 import com.baec23.tenaday.model.QuizQuestion
+import com.baec23.tenaday.repository.util.RetryUtil
 import javax.inject.Inject
-import kotlin.random.Random
-import kotlin.random.nextInt
-import kotlinx.coroutines.delay
+
+private const val TAG = "QuizQuestionRepository"
 
 class QuizQuestionRepository @Inject constructor(private val tenADayApi: TenADayApi) {
     suspend fun getRandomQuizQuestion(): Result<QuizQuestion> {
-        delay(1000)
+        return RetryUtil.withRetry { tryGetRandomQuizQuestion() }
+    }
+
+    private suspend fun tryGetRandomQuizQuestion(): Result<QuizQuestion> {
         return try {
-            val rand = Random.nextInt(10)
-            if (rand == 1) {
-                return Result.failure(Exception())
-            }
             val dto = tenADayApi.getQuizQuestion()
             val questionString = dto.baseWord.text
             val correctAnswer = KoreanWord(

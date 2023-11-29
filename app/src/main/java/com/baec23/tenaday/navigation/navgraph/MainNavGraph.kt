@@ -15,7 +15,10 @@ import com.baec23.tenaday.ui.screen.main.quiz.quizScreenRoute
 
 const val mainNavGraphRoute = "main_nav_graph_route"
 fun NavGraphBuilder.mainNavGraph() {
-    navigation(startDestination = quizScreenRoute, route = mainNavGraphRoute) {
+    navigation(
+        startDestination = quizScreenRoute,
+        route = mainNavGraphRoute
+    ) {
         quizScreen()
         addWordScreen()
     }

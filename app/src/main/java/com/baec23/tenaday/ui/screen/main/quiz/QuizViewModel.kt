@@ -22,6 +22,7 @@ class QuizViewModel @Inject constructor(
 ) : ViewModel() {
     private var currQuestion = MutableStateFlow<QuizQuestion?>(null)
     private var incorrectAnswerIndexes = MutableStateFlow<List<Int>>(listOf())
+    private var hasAnsweredCorrectly = MutableStateFlow(false)
 
     val uiState =
         currQuestion.combine(incorrectAnswerIndexes) { currQuestionData, incorrectAnswerIndexes ->
@@ -46,6 +47,8 @@ class QuizViewModel @Inject constructor(
                 correctAnswerIndex = correctAnswerIndex,
                 incorrectAnswerIndexes = incorrectAnswerIndexes
             )
+        }.combine(hasAnsweredCorrectly) { quizUiState, hasAnsweredCorrectly ->
+            quizUiState.copy(hasAnsweredCorrectly = hasAnsweredCorrectly)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -55,10 +58,9 @@ class QuizViewModel @Inject constructor(
     fun onEvent(event: QuizUiEvent) {
         when (event) {
             is QuizUiEvent.OnAnswerPress -> {
-                if (currQuestion.value == null) {
-                    return
-                }
-                if (event.pressedIndex == currQuestion.value!!.correctAnswerIndex) {
+                val currQuestionValue = currQuestion.value ?: return
+                if (event.pressedIndex == currQuestionValue.correctAnswerIndex) {
+                    hasAnsweredCorrectly.value = true
                     viewModelScope.launch {
                         snackbarService.showSnackbar("Correct!")
                         delay(1000)
@@ -77,6 +79,7 @@ class QuizViewModel @Inject constructor(
 
     private fun loadRandomQuizQuestion() {
         incorrectAnswerIndexes.value = listOf()
+        hasAnsweredCorrectly.value = false
         currQuestion.value = null
         viewModelScope.launch {
             val result = quizQuestionRepository.getRandomQuizQuestion()
@@ -93,7 +96,9 @@ class QuizViewModel @Inject constructor(
     }
 
     init {
-        loadRandomQuizQuestion()
+        if (currQuestion.value == null) {
+            loadRandomQuizQuestion()
+        }
     }
 }
 
@@ -103,6 +108,7 @@ data class QuizUiState(
     val currQuestionText: String = "",
     val potentialAnswers: List<KoreanWord> = listOf(),
     val correctAnswerIndex: Int = -1,
+    val hasAnsweredCorrectly: Boolean = false,
     val incorrectAnswerIndexes: List<Int> = listOf()
 )
 

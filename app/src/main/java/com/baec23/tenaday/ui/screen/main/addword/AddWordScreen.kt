@@ -31,14 +31,11 @@ import com.baec23.ludwig.component.section.DisplaySection
 import com.baec23.tenaday.model.PartOfSpeech
 import com.baec23.tenaday.ui.comp.BaseScreen
 
-/*
-*
-* TODO: Add route to NavHost
-*
-*/
 const val addWordScreenRoute = "addword_screen_route"
 fun NavGraphBuilder.addWordScreen() {
-    composable(route = addWordScreenRoute) {
+    composable(
+        route = addWordScreenRoute
+    ) {
         val viewModel = hiltViewModel<AddWordViewModel>()
         val uiState = viewModel.uiState
         AddWordScreen(uiState = uiState, onEvent = { event -> viewModel.onEvent(event) })
