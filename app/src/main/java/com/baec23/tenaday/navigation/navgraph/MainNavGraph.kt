@@ -1,6 +1,7 @@
 package com.baec23.tenaday.navigation.navgraph
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.navigation.NavGraphBuilder
@@ -12,15 +13,18 @@ import com.baec23.tenaday.ui.screen.main.addword.addWordScreen
 import com.baec23.tenaday.ui.screen.main.addword.addWordScreenRoute
 import com.baec23.tenaday.ui.screen.main.quiz.quizScreen
 import com.baec23.tenaday.ui.screen.main.quiz.quizScreenRoute
+import com.baec23.tenaday.ui.screen.main.test.testScreen
+import com.baec23.tenaday.ui.screen.main.test.testScreenRoute
 
 const val mainNavGraphRoute = "main_nav_graph_route"
 fun NavGraphBuilder.mainNavGraph() {
     navigation(
-        startDestination = quizScreenRoute,
+        startDestination = testScreenRoute,
         route = mainNavGraphRoute
     ) {
         quizScreen()
         addWordScreen()
+        testScreen()
     }
 }
 
@@ -45,5 +49,10 @@ val bottomNavigationItems = listOf(
         route = addWordScreenRoute,
         iconImageVector = Icons.Default.Info,
         label = "Add Word"
+    ),
+    BottomNavigationItem(
+        route = testScreenRoute,
+        iconImageVector = Icons.Default.Face,
+        label = "Test"
     )
 )

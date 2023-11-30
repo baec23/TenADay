@@ -143,5 +143,8 @@ dependencies {
     implementation(libs.retrofit.moshi)
 
     // OkHttp
-    implementation(libs.okhttp.bom)
+    implementation(platform(libs.okhttp.bom))
+
+    // Compose animation-graphics
+    implementation(libs.androidx.compose.animation.animation.graphics)
 }
