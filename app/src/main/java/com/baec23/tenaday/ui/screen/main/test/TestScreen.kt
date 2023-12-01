@@ -22,6 +22,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.baec23.ludwig.component.button.StatefulButton
 import com.baec23.ludwig.component.inputfield.InputField
+import com.baec23.ludwig.component.inputfield.InputValidator
 import com.baec23.tenaday.ui.comp.AnimatedText
 import com.baec23.tenaday.ui.comp.BaseScreen
 
@@ -49,7 +50,9 @@ fun TestScreen(
     var displayedText by remember { mutableStateOf("") }
     BaseScreen {
         Column(modifier = Modifier.fillMaxSize()) {
-            InputField(value = input, onValueChange = { input = it }, label = "Input")
+            InputField(value = input, onValueChange = {
+                input = it
+            }, label = "Input", inputValidator = InputValidator.Any)
             Spacer(modifier = Modifier.height(16.dp))
             AnimatedText(
                 initialText = "",

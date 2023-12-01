@@ -1,61 +1,99 @@
 package com.baec23.tenaday.ui.comp
 
+import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.max
 
 const val TAG = "AnimatedChangingText"
 
 @Composable
 fun AnimatedText(
-    initialText: String,
     text: String,
     textStyle: TextStyle,
-    animationDuration: Int = 500
+    animationDuration: Int = 1000
 ) {
-    val currText by remember { mutableStateOf(initialText) }
-    var chars by remember { mutableStateOf(initialText.map { char -> char }) }
     val coroutineScope = rememberCoroutineScope()
 
+    var currText by remember { mutableStateOf(text) }
+    val currLength = max(currText.length, text.length)
+    val currCharStates by remember { mutableStateListOf(
+        List(currLength){ a -> a}
+    )}
+
+    var currChars by remember { mutableStateOf(initialText.map { c -> c }) }
+//    var currLength by remember { mutableIntStateOf(initialText.length) }
+
+
     suspend fun updateChars(targetText: String) {
-        val targetTextChars = targetText.map { c -> c }
-        val mutableChars = chars.toMutableList()
-        val delayDuration = if (chars.isNotEmpty()) animationDuration / chars.size else 100
-        targetTextChars.forEachIndexed { index, c ->
-            if (index < mutableChars.size) {
-                mutableChars[index] = c
+        numAnimationCompletedChars = 0
+        val delayDuration = if (currLength == 0) 0 else animationDuration / currLength
+
+        val newCharArray = CharArray(currLength) { i ->
+            currChars.getOrNull(i) ?: ' '
+        }
+        val newCharIsAnimating = MutableList(newCharArray.size) { true }
+        charIsAnimating = newCharIsAnimating.toList()
+
+        for (i in newCharArray.indices) {
+            if (i < targetText.length) {
+                newCharArray[i] = targetText[i]
             } else {
-                mutableChars.add(c)
+                newCharArray[i] = ' '
             }
-            chars = mutableChars.toList()
+            currChars = newCharArray.toList()
             delay(delayDuration.toLong())
         }
     }
+
     LaunchedEffect(key1 = text) {
-        if (text != currText) {
-            coroutineScope.launch { updateChars(text) }
-        }
+        coroutineScope.launch { updateChars(text) }
     }
 
-    Row(modifier = Modifier.fillMaxWidth()) {
-        if (chars.isNotEmpty()) {
-            repeat(chars.size) {
-                AnimatedChar(
-                    initialChar = ' ',
-                    char = chars[it],
-                    textStyle = textStyle
-                )
-            }
+    LaunchedEffect(key1 = numAnimationCompletedChars) {
+        Log.d(
+            TAG,
+            "AnimatedText: numAnimationCompletedChars = $numAnimationCompletedChars - needed = $currLength"
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        repeat(currLength) { index ->
+            val char = currChars.getOrNull(index) ?: ' '
+            AnimatedChar(
+                modifier = Modifier.border(width = 1.dp, color = Color.Red),
+                initialChar = char,
+                char = char,
+                textStyle = textStyle,
+                onAnimationComplete = {
+                    numAnimationCompletedChars += 1
+                }
+            )
         }
     }
 }
+
+data class AnimatedCharState(
+    val fromChar: Char?,
+    val toChar: Char?,
+    val color: Color,
+    val shouldAnimate: Boolean
+)
