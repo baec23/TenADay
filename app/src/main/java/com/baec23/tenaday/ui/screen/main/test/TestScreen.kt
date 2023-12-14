@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import com.baec23.ludwig.component.button.StatefulButton
 import com.baec23.ludwig.component.inputfield.InputField
 import com.baec23.ludwig.component.inputfield.InputValidator
+import com.baec23.ludwig.morpher.component.AnimatedMorphVector
 import com.baec23.tenaday.ui.comp.AnimatedText
 import com.baec23.tenaday.ui.comp.BaseScreen
 
@@ -46,23 +47,28 @@ fun NavController.navigateToTestScreen(navOptions: NavOptions? = null) {
 fun TestScreen(
     viewModel: TestViewModel = hiltViewModel()
 ) {
-    var input by remember { mutableStateOf("") }
-    var displayedText by remember { mutableStateOf("") }
+//    val animationProgress = remember {
+//        Animatable(0f)
+//    }
+//    var input by remember { mutableStateOf("") }
+//    var displayedText by remember { mutableStateOf("") }
+
     BaseScreen {
         Column(modifier = Modifier.fillMaxSize()) {
-            InputField(value = input, onValueChange = {
-                input = it
-            }, label = "Input", inputValidator = InputValidator.Any)
-            Spacer(modifier = Modifier.height(16.dp))
-            AnimatedText(
-                initialText = "",
-                text = displayedText,
-                textStyle = MaterialTheme.typography.displaySmall
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            StatefulButton(text = "CHANGE") {
-                displayedText = input
-            }
+//            AnimatedMorphVector(startSource = , endSource = , progress = )
+//            InputField(value = input, onValueChange = {
+//                input = it
+//            }, label = "Input", inputValidator = InputValidator.Any)
+//            Spacer(modifier = Modifier.height(16.dp))
+//            AnimatedText(
+//                initialText = "",
+//                text = displayedText,
+//                textStyle = MaterialTheme.typography.displaySmall
+//            )
+//            Spacer(modifier = Modifier.height(16.dp))
+//            StatefulButton(text = "CHANGE") {
+//                displayedText = input
+//            }
         }
     }
 }

@@ -63,9 +63,6 @@ class AddWordViewModel @Inject constructor(
             }
         }
     }
-
-    init {
-    }
 }
 
 internal data class AddWordUiState(

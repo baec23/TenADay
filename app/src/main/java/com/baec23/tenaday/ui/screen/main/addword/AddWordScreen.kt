@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -38,7 +39,7 @@ fun NavGraphBuilder.addWordScreen() {
     ) {
         val viewModel = hiltViewModel<AddWordViewModel>()
         val uiState = viewModel.uiState
-        AddWordScreen(uiState = uiState, onEvent = { event -> viewModel.onEvent(event) })
+        AddWordScreen(uiState = uiState, onEvent = viewModel::onEvent)
     }
 }
 
@@ -110,4 +111,17 @@ private fun AddWordScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun AddWordScreenPreview() {
+    val uiState: AddWordUiState = AddWordUiState(
+        isBusy = false,
+        error = null,
+        baseWordText = "Abcd",
+        selectedPartOfSpeech = PartOfSpeech.Adverb,
+        definitionText = "Hello"
+    )
+    AddWordScreen(uiState = uiState, onEvent = {})
 }

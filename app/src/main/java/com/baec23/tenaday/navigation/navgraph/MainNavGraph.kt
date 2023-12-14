@@ -11,6 +11,8 @@ import com.baec23.ludwig.component.navbar.BottomNavigationItem
 import com.baec23.tenaday.navigation.NavService
 import com.baec23.tenaday.ui.screen.main.addword.addWordScreen
 import com.baec23.tenaday.ui.screen.main.addword.addWordScreenRoute
+import com.baec23.tenaday.ui.screen.main.morphtest.morphTestScreen
+import com.baec23.tenaday.ui.screen.main.morphtest.morphTestScreenRoute
 import com.baec23.tenaday.ui.screen.main.quiz.quizScreen
 import com.baec23.tenaday.ui.screen.main.quiz.quizScreenRoute
 import com.baec23.tenaday.ui.screen.main.test.testScreen
@@ -25,6 +27,7 @@ fun NavGraphBuilder.mainNavGraph() {
         quizScreen()
         addWordScreen()
         testScreen()
+        morphTestScreen()
     }
 }
 
@@ -41,9 +44,9 @@ fun NavService.navigateToMainNavGraph() {
 
 val bottomNavigationItems = listOf(
     BottomNavigationItem(
-        route = quizScreenRoute,
+        route = morphTestScreenRoute,
         iconImageVector = Icons.Default.Home,
-        label = "Quiz"
+        label = "Morph"
     ),
     BottomNavigationItem(
         route = addWordScreenRoute,
